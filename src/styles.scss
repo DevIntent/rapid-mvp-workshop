@@ -1,0 +1,24 @@
+@import "theme";
+@import "variables";
+
+// Include the base styles for Angular Material core.
+// Configure typography CSS classes (e.g., mat-h1, mat-display-1, mat-typography, mat-title, mat-body-1, etc.).
+// Be sure that you only ever include this mixin once!
+@include mat-core($app-typography);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component that you are using.
+@include angular-material-theme($app-theme);
+
+html {
+  color: $dark-primary-text;
+}
+body {
+  margin: 0;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+}
+a {
+  color: mat-color($app-primary);
+}

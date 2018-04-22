@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "users": {
+      ".read": "false",
+      "$user_id": {
+        ".read": "auth.uid === $user_id",
+        ".write": "auth.uid === $user_id || $user_id === null",
+        ".validate": "newData.hasChildren(['displayName', 'children'])"
+      }
+    }
+  }
+}

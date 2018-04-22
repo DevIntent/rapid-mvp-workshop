@@ -1,0 +1,26 @@
+@import "theme";
+
+// Breakpoints
+$handset: 360px;
+$large-handset: 480px;
+$x-large-handset: 600px; // flex-layout sm
+$tablet: 640px; /* app drawer breakpoint */
+$large-tablet: 840px;
+$desktop: 960px; // flex-layout md
+$large-desktop: 1280px; // flex-layout lg
+$x-large-desktop: 1440px;
+$xx-large-desktop: 1920px; // flex-layout xl
+$ultra-hd-desktop: 2560px;
+
+// Other Sizes
+$base-border-radius: 3px;
+$base-spacing: 24px;
+$small-spacing: $base-spacing * 0.5;
+
+// Border
+$base-border: 1px solid $dark-dividers;
+
+// Animations
+$transition-duration: 500ms;
+$transition-timing: ease;
+$transition-all: all $transition-duration $transition-timing;
