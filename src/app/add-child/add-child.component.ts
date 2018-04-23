@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
          fxLayoutGap="24px" *ngIf="!child?.gender">
       <mat-card id="boy" (click)="addBoy()">
         <mat-card-content fxLayout="row" fxLayoutAlign="center center">
-          <mat-icon>child_care</mat-icon>
+          <span class="emoji-icon">👦🏽</span>
         </mat-card-content>
         <mat-card-actions align="end">
           <button mat-button color="primary">Add a boy</button>
@@ -17,7 +17,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
       </mat-card>
       <mat-card id="girl" (click)="addGirl()">
         <mat-card-content fxLayout="row" fxLayoutAlign="center center">
-          <mat-icon>child_care</mat-icon>
+          <span class="emoji-icon">👧🏽</span>
         </mat-card-content>
         <mat-card-actions align="end">
           <button mat-button color="accent">Add a girl</button>

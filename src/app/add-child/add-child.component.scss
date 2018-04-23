@@ -6,34 +6,46 @@
   width: 100%;
 }
 .mat-card {
-  width: 260px;
+  width: 140px;
 }
 #genderSelection {
   .mat-card {
     cursor: pointer;
-    background-color: mat-color($app-primary, 50);
+
     .mat-card-content {
-      height: 160px;
+      height: 140px;
+      border-radius: 130px;
     }
   }
   #boy {
-    .mat-icon {
-      color: mat-color($app-primary);
-      font-size: 128px;
-      height: 128px;
-      width: 128px;
+    .mat-card-content {
+      background-color: mat-color($app-primary, 300);
+    }
+    .emoji-icon {
+      color: white;
+      font-size: 80px;
+      line-height: 80px;
+      height: 80px;
+      width: 80px;
     }
   }
   #girl {
-    .mat-icon {
-      color: mat-color($app-accent);
-      font-size: 128px;
-      height: 128px;
-      width: 128px;
+    .mat-card-content {
+      background-color: mat-color($app-accent);
+    }
+    .emoji-icon {
+      color: white;
+      font-size: 80px;
+      line-height: 80px;
+      height: 80px;
+      width: 80px;
     }
   }
 }
 form {
+  .mat-card {
+    width: 260px;
+  }
   input {
     font-size: 16px;
   }
