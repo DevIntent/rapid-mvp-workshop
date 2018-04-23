@@ -8,7 +8,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -p 4202",
+    "start": "ng serve",
     "build": "ng build --prod",
     "deploy": "firebase deploy",
     "test": "ng test",

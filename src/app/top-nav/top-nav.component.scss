@@ -1,0 +1,15 @@
+@import "../../theme";
+
+.mat-toolbar {
+  height: 256px;
+
+  #logo {
+    height: 64px;
+    width: 64px;
+    margin-right: 16px;
+  }
+  h1 {
+    padding-top: 2px;
+    color: $light-primary-text;
+  }
+}

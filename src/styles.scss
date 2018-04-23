@@ -15,10 +15,14 @@ html {
 }
 body {
   margin: 0;
+  background-color: mat-color($app-primary, 700);
 }
 input[type="search"] {
   -webkit-appearance: textfield;
 }
 a {
   color: mat-color($app-primary);
+}
+.mat-button {
+  text-transform: uppercase;
 }
