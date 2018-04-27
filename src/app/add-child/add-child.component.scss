@@ -1,52 +1,37 @@
-@import "../../theme";
+@import '../../theme';
+@import '../../variables';
 
 :host {
   display: flex;
   height: 100%;
   width: 100%;
 }
-.mat-card {
-  width: 140px;
-}
-#genderSelection {
-  .mat-card {
-    cursor: pointer;
+.container {
+  margin-top: $base-spacing;
+  width: 100%;
 
-    .mat-card-content {
-      height: 140px;
-      border-radius: 130px;
+  #genderSelection {
+    width: 100%;
+    margin-bottom: $base-spacing * 2;
+
+    &.belowChildren {
+      margin-top: $base-spacing * 2;
+    }
+
+    .mat-card {
+      width: 140px;
+      cursor: pointer;
     }
   }
-  #boy {
-    .mat-card-content {
-      background-color: mat-color($app-primary, 300);
+  form {
+    .mat-card {
+      width: 260px;
     }
-    .emoji-icon {
-      color: white;
-      font-size: 80px;
-      line-height: 80px;
-      height: 80px;
-      width: 80px;
+    input {
+      font-size: 16px;
     }
   }
-  #girl {
-    .mat-card-content {
-      background-color: mat-color($app-accent);
-    }
-    .emoji-icon {
-      color: white;
-      font-size: 80px;
-      line-height: 80px;
-      height: 80px;
-      width: 80px;
-    }
-  }
-}
-form {
-  .mat-card {
-    width: 260px;
-  }
-  input {
-    font-size: 16px;
+  app-children {
+    margin: $base-spacing;
   }
 }
