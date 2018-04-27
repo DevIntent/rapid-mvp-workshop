@@ -22,7 +22,6 @@
         "styles.scss"
       ],
       "scripts": [
-        "../node_modules/hammerjs/hammer.js",
         "../node_modules/firebase/firebase-app.js",
         "../node_modules/firebase/firebase-auth.js",
         "../node_modules/firebase/firebase-database.js"
