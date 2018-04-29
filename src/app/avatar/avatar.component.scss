@@ -6,7 +6,8 @@
 
 .container {
   height: 140px;
-  border-radius: 130px;
+  width: 140px;
+  border-radius: 140px;
 
   &.boy {
     background-color: mat-color($app-primary, 300);

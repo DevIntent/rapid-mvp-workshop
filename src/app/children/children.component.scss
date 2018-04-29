@@ -1,4 +1,13 @@
 .mat-card {
   width: 140px;
   cursor: pointer;
+
+  label {
+    font-size: 10px;
+    opacity: .87;
+  }
+  .age {
+    margin-left: 4px;
+    font-size: 16px;
+  }
 }

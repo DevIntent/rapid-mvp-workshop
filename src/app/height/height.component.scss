@@ -1,0 +1,18 @@
+.mat-card {
+  width: 288px;
+
+  .feetContainer {
+    .mat-form-field {
+      width: 142px;
+    }
+
+    .feetInput {
+      margin-right: 4px;
+    }
+  }
+
+  .tableContainer {
+    max-height: 400px;
+    overflow: auto;
+  }
+}

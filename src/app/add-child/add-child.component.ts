@@ -1,16 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ChildrenService } from '../children.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Child, ChildrenService } from '../children.service';
 
 @Component({
   selector: 'app-add-child',
   template: `
     <div class="container" fxLayout="column" fxLayoutAlign="start center">
-      <app-children *ngIf="childrenService.children?.length"></app-children>
+      <app-children *ngIf="childrenService.getChildren()?.length"></app-children>
       <div id="genderSelection" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center center"
            fxLayoutGap="24px" *ngIf="!child?.gender" fxFlex
-           [ngClass]="childrenService.children?.length ? 'belowChildren' : ''">
+           [ngClass]="childrenService.getChildren()?.length ? 'belowChildren' : ''">
         <mat-card id="boy" (click)="addBoy()" aria-label="Add a boy">
           <mat-card-content fxLayout="row" fxLayoutAlign="center center">
             <app-avatar gender="male" [emoji]="defaultBoyEmoji" opacity="0.7"></app-avatar>
@@ -33,10 +33,10 @@ import { ChildrenService } from '../children.service';
         <mat-card fxLayout="column">
           <mat-card-content>
             <mat-form-field color="accent">
-              <input matInput #nameInput type="text" placeholder="Name" formControlName="name">
+              <input matInput #nameInput type="text" placeholder="Name" [formControl]="nameControl">
             </mat-form-field>
             <mat-form-field color="accent">
-              <input matInput [matDatepicker]="picker" placeholder="Date of Birth" formControlName="dob">
+              <input matInput [matDatepicker]="picker" placeholder="Date of Birth" [formControl]="dobControl">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -53,17 +53,19 @@ import { ChildrenService } from '../children.service';
 })
 export class AddChildComponent implements OnInit {
   @ViewChild('nameInput') nameInput: ElementRef;
-  child: any;
+  child: Child;
   form: FormGroup;
   defaultBoyEmoji = '👦🏽';
   defaultGirlEmoji = '👧🏽';
+  nameControl = new FormControl('');
+  dobControl = new FormControl('');
 
   constructor(private router: Router,
               private fb: FormBuilder,
               public childrenService: ChildrenService) {
     this.form = this.fb.group({
-      name: '',
-      dob: ''
+      name: this.nameControl,
+      dob: this.dobControl
     });
   }
 
@@ -71,12 +73,12 @@ export class AddChildComponent implements OnInit {
   }
 
   addBoy() {
-    this.child = {gender: 'male', emoji: this.defaultBoyEmoji};
+    this.child = {name: '', gender: 'male', emoji: this.defaultBoyEmoji};
     this.focusNameInput();
   }
 
   addGirl() {
-    this.child = {gender: 'female', emoji: this.defaultGirlEmoji};
+    this.child = {name: '', gender: 'female', emoji: this.defaultGirlEmoji};
     this.focusNameInput();
   }
 

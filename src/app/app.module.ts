@@ -13,6 +13,8 @@ import { ChildrenService } from './children.service';
 import { ChildrenComponent } from './children/children.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ChildDetailsComponent } from './child-details/child-details.component';
+import { WeightComponent } from './weight/weight.component';
+import { HeightComponent } from './height/height.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { ChildDetailsComponent } from './child-details/child-details.component';
     AddChildComponent,
     ChildrenComponent,
     AvatarComponent,
-    ChildDetailsComponent
+    ChildDetailsComponent,
+    WeightComponent,
+    HeightComponent
   ],
   imports: [
     BrowserModule,
