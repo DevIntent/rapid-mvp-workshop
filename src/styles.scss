@@ -26,3 +26,11 @@ a {
 .mat-button {
   text-transform: uppercase;
 }
+
+// Overrides of internal Material Styles
+app-emoji-picker {
+  // Don't cut off the top of emoji heads
+  .mat-select-value {
+    overflow: visible;
+  }
+}

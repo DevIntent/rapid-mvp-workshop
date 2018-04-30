@@ -30,16 +30,20 @@ import { Child, ChildrenService } from '../children.service';
       </div>
       <form fxLayout="column" fxLayoutAlign="center center" [formGroup]="form"
             *ngIf="child?.gender">
-        <mat-card fxLayout="column">
-          <mat-card-content>
+        <mat-card>
+          <mat-card-content fxLayout="column">
             <mat-form-field color="accent">
               <input matInput #nameInput type="text" placeholder="Name" [formControl]="nameControl">
             </mat-form-field>
-            <mat-form-field color="accent">
-              <input matInput [matDatepicker]="picker" placeholder="Date of Birth" [formControl]="dobControl">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutGap="4px">
+              <app-emoji-picker color="accent" [control]="emojiControl" [gender]="child.gender">
+              </app-emoji-picker>
+              <mat-form-field id="datepicker" color="accent">
+                <input matInput [matDatepicker]="picker" placeholder="Date of Birth" [formControl]="dobControl">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
           </mat-card-content>
           <mat-card-actions align="end">
             <button mat-button type="button" color="primary" (click)="onCancel()">Cancel</button>
@@ -58,6 +62,7 @@ export class AddChildComponent implements OnInit {
   defaultBoyEmoji = '👦🏽';
   defaultGirlEmoji = '👧🏽';
   nameControl = new FormControl('');
+  emojiControl = new FormControl('');
   dobControl = new FormControl('');
 
   constructor(private router: Router,
@@ -65,6 +70,7 @@ export class AddChildComponent implements OnInit {
               public childrenService: ChildrenService) {
     this.form = this.fb.group({
       name: this.nameControl,
+      emoji: this.emojiControl,
       dob: this.dobControl
     });
   }
@@ -73,12 +79,12 @@ export class AddChildComponent implements OnInit {
   }
 
   addBoy() {
-    this.child = {name: '', gender: 'male', emoji: this.defaultBoyEmoji};
+    this.child = {name: '', gender: 'male'};
     this.focusNameInput();
   }
 
   addGirl() {
-    this.child = {name: '', gender: 'female', emoji: this.defaultGirlEmoji};
+    this.child = {name: '', gender: 'female'};
     this.focusNameInput();
   }
 

@@ -24,11 +24,11 @@
     }
   }
   form {
-    .mat-card {
-      width: 260px;
-    }
-    input {
+    .mat-card-content {
       font-size: 16px;
+    }
+    #datepicker {
+      width: 128px;
     }
   }
   app-children {
