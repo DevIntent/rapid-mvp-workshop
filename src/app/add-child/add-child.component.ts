@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Child, ChildrenService } from '../children.service';
 
 @Component({
@@ -33,7 +33,7 @@ import { Child, ChildrenService } from '../children.service';
         <mat-card>
           <mat-card-content fxLayout="column">
             <mat-form-field color="accent">
-              <input matInput #nameInput type="text" placeholder="Name" [formControl]="nameControl">
+              <input matInput #nameInput type="text" placeholder="Name" [formControl]="nameControl" required>
             </mat-form-field>
             <div fxLayout="row" fxLayoutGap="4px">
               <app-emoji-picker color="accent" [control]="emojiControl" [gender]="child.gender">
@@ -47,7 +47,7 @@ import { Child, ChildrenService } from '../children.service';
           </mat-card-content>
           <mat-card-actions align="end">
             <button mat-button type="button" color="primary" (click)="onCancel()">Cancel</button>
-            <button mat-button color="primary" (click)="onSave()">Save</button>
+            <button mat-button color="primary" (click)="onSave()" [disabled]="form.pristine || form.invalid">Save</button>
           </mat-card-actions>
         </mat-card>
       </form>
