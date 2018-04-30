@@ -1,18 +1,30 @@
+@import '../../theme';
+
 .mat-card {
   width: 288px;
 
+  .mat-toolbar {
+    &.boy {
+      background-color: mat-color($app-primary, 300);
+      color: $light-primary-text;
+    }
+    &.girl {
+      background-color: mat-color($app-accent, 200);
+      color: $light-primary-text;
+    }
+  }
   .feetContainer {
     .mat-form-field {
       width: 142px;
     }
-
     .feetInput {
       margin-right: 4px;
     }
   }
-
   .tableContainer {
-    max-height: 400px;
-    overflow: auto;
+    .mat-table {
+      max-height: 400px;
+      overflow: auto;
+    }
   }
 }

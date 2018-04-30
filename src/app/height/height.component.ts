@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/cor
 import { ChildService, Height, HeightUnit } from '../child.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSort, MatTableDataSource } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-height',
@@ -41,12 +42,39 @@ import { MatSort, MatTableDataSource } from '@angular/material';
         </form>
         <div class="tableContainer" *ngIf="childService.heights.length">
           <br>
-          <h2>Height Measurements</h2>
+          <mat-toolbar [ngClass]="{'boy': childService.child.gender === 'male',
+                                   'girl': childService.child.gender === 'female'}">
+            <mat-toolbar-row>
+              <span>Height Measurements</span>
+              <span fxFlex></span>
+              <button mat-icon-button [disabled]="!selection.hasValue()" 
+                      (click)="onRemove(selection.selected)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-toolbar-row>
+          </mat-toolbar>
           <mat-table #table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc">
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
             <ng-container matColumnDef="feet" *ngIf="form.get('units').value === 'ft'">
               <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
               <mat-cell *matCellDef="let height"> 
-                {{height.feet ? (height.feet | number:'1.0-2') + ' ft ' : ''  + height.inches + ' in'}} 
+                <span *ngIf="height.feet">{{(height.feet | number:'1.0-2') + ' ft '}}</span>
+                <span *ngIf="height.feet && height.inches">&nbsp;</span>
+                <span *ngIf="height.inches">{{(height.inches | number:'1.0-2') + ' in'}}</span> 
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="meters" *ngIf="form.get('units').value === 'm'">
@@ -76,9 +104,10 @@ export class HeightComponent implements OnInit, AfterViewInit {
   unitsControl = new FormControl('ft');
   dateControl = new FormControl(new Date());
   dataSource: MatTableDataSource<Height>;
-  feetColumns = ['feet', 'date'];
-  meterColumns = ['meters', 'date'];
+  feetColumns = ['select', 'feet', 'date'];
+  meterColumns = ['select', 'meters', 'date'];
   displayedColumns = this.feetColumns;
+  selection = new SelectionModel<Height>(true, []);
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
@@ -124,7 +153,41 @@ export class HeightComponent implements OnInit, AfterViewInit {
   onAddHeightEntry() {
     this.childService.addHeightEntry(this.form.getRawValue());
     this.resetForm();
+    this.updateTable();
+  }
+
+  onRemove(heights: Height[]) {
+    if (this.childService.removeHeightEntries(heights)) {
+      this.updateTable();
+    } else {
+      console.error('Failed to remove all heights requested');
+    }
+    this.updateTable(true);
+  }
+
+  updateTable(resetSelection?: boolean) {
     this.dataSource = new MatTableDataSource<Height>(this.childService.heights);
     this.dataSource.sort = this.sort;
+    if (resetSelection) {
+      this.selection = new SelectionModel<Height>(true, []);
+    }
+  }
+
+  /**
+   * @returns {boolean} Whether the number of selected elements matches the total number of rows.
+   */
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   */
+  masterToggle(): void {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }

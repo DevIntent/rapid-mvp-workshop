@@ -59,6 +59,9 @@ export class ChildService {
     }
   }
 
+  /**
+   * @param {Weight} weight to add
+   */
   addWeightEntry(weight: Weight) {
     if (weight.units === undefined) {
       weight.units = WeightUnit.LBS;
@@ -70,9 +73,36 @@ export class ChildService {
     this.saveWeights(this.weights);
   }
 
-  removeWeightEntry(index: number) {
-    this.weights = this.weights.splice(index, 1);
-    this.saveWeights(this.weights);
+  /**
+   * @param {Weight[]} weights object to remove
+   * @returns {boolean} true if all of the weights were found and removed
+   */
+  removeWeightEntries(weights: Weight[]): boolean {
+    let removedCount = 0;
+    weights.map((weight: Weight) => {
+      if (this.removeWeightEntry(weight)) {
+        removedCount++;
+      }
+    });
+    return removedCount === weights.length;
+  }
+
+  /**
+   * @param {Weight} weight object to remove
+   * @returns {boolean} true if the weight was found and removed
+   */
+  removeWeightEntry(weight: Weight): boolean {
+    let removed = false;
+    for (let i = 0; i < this.weights.length; i++) {
+      if (Object.is(this.weights[i], weight)) {
+        this.weights.splice(i, 1);
+        removed = true;
+      }
+    }
+    if (removed) {
+      this.saveWeights(this.weights);
+    }
+    return removed;
   }
 
   saveWeights(weights: Weight[]) {
@@ -81,17 +111,15 @@ export class ChildService {
     }
   }
 
+  /**
+   * @param {Height} height to add
+   */
   addHeightEntry(height: Height) {
     if (height.units === undefined) {
       height.units = HeightUnit.FEET;
     }
     if (height.date === undefined) {
       height.date = new Date();
-    }
-    if (height.units === HeightUnit.FEET) {
-      height.meters = height.feet * 0.3048 + height.inches * 0.0254;
-    } else {
-      height.feet = height.meters * 3.28084;
     }
     if (!height.feet) {
       height.feet = 0;
@@ -102,13 +130,45 @@ export class ChildService {
     if (!height.meters) {
       height.meters = 0;
     }
+    if (height.units === HeightUnit.FEET) {
+      height.meters = height.feet * 0.3048 + height.inches * 0.0254;
+    } else {
+      height.feet = height.meters * 3.28084;
+    }
     this.heights.unshift(height);
     this.saveHeights(this.heights);
   }
 
-  removeHeightEntry(index: number) {
-    this.heights = this.heights.splice(index, 1);
-    this.saveHeights(this.heights);
+  /**
+   * @param {Height[]} heights object to remove
+   * @returns {boolean} true if all of the heights were found and removed
+   */
+  removeHeightEntries(heights: Height[]): boolean {
+    let removedCount = 0;
+    heights.map((height: Height) => {
+      if (this.removeHeightEntry(height)) {
+        removedCount++;
+      }
+    });
+    return removedCount === heights.length;
+  }
+
+  /**
+   * @param {Height} height object to remove
+   * @returns {boolean} true if the height was found and removed
+   */
+  removeHeightEntry(height: Height): boolean {
+    let removed = false;
+    for (let i = 0; i < this.heights.length; i++) {
+      if (Object.is(this.heights[i], height)) {
+        this.heights.splice(i, 1);
+        removed = true;
+      }
+    }
+    if (removed) {
+      this.saveHeights(this.heights);
+    }
+    return removed;
   }
 
   saveHeights(heights: Height[]) {
