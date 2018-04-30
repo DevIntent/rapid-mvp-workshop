@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
         <mat-card-title>{{child.name}}</mat-card-title>
         <mat-card-content>
           <app-avatar [gender]="child.gender" [emoji]="child.emoji"></app-avatar>
-          <div>
+          <div *ngIf="child.dob">
             <div><label>Age</label></div>
             <div class="age">{{childrenService.getAge(child.dob)}}</div>
           </div>

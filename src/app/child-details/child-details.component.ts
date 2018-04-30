@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Child, ChildrenService } from '../children.service';
+import { ChildrenService } from '../children.service';
 import { ChildService } from '../child.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ChildService } from '../child.service';
         <mat-card-content>
           <app-avatar [gender]="childService.child.gender" [emoji]="childService.child.emoji"
                       fxLayout="column" fxLayoutAlign="start center"></app-avatar>
-          <div>
+          <div *ngIf="childService.child.dob">
             <div><label>Age</label></div>
             <div class="age">{{age}}</div>
           </div>
