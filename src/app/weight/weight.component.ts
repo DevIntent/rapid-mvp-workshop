@@ -34,7 +34,7 @@ import { SelectionModel } from '@angular/cdk/collections';
           <mat-toolbar [ngClass]="{'boy': childService.child.gender === 'male',
                                    'girl': childService.child.gender === 'female'}">
             <mat-toolbar-row>
-              <span>Weight Measurements</span>
+              <span>Weight History</span>
               <span fxFlex></span>
               <button mat-icon-button [disabled]="!selection.hasValue()"
                       (click)="onRemove(selection.selected)">
@@ -111,7 +111,8 @@ export class WeightComponent implements OnInit, AfterViewInit {
   onRemove(weights: Weight[]) {
     if (this.childService.removeWeightEntries(weights)) {
     } else {
-      console.error('Failed to remove all weights requested');
+      // TODO Snackbar
+      console.error('Failed to remove all weights requested.');
     }
     this.updateTable(true);
   }

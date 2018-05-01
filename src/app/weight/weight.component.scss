@@ -1,4 +1,6 @@
 @import '../../theme';
+@import '../../mixins';
+@import '../../variables';
 
 .mat-card {
   width: 288px;
@@ -9,7 +11,7 @@
       color: $light-primary-text;
     }
     &.girl {
-      background-color: mat-color($app-accent, 200);
+      background-color: mat-color($app-accent, 300);
       color: $light-primary-text;
     }
   }
@@ -18,5 +20,10 @@
       max-height: 400px;
       overflow: auto;
     }
+  }
+}
+@include breakpoint($handset) {
+  .mat-card {
+    width: 300px;
   }
 }

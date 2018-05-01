@@ -45,7 +45,7 @@ import { SelectionModel } from '@angular/cdk/collections';
           <mat-toolbar [ngClass]="{'boy': childService.child.gender === 'male',
                                    'girl': childService.child.gender === 'female'}">
             <mat-toolbar-row>
-              <span>Height Measurements</span>
+              <span>Height History</span>
               <span fxFlex></span>
               <button mat-icon-button [disabled]="!selection.hasValue()" 
                       (click)="onRemove(selection.selected)">
@@ -160,7 +160,8 @@ export class HeightComponent implements OnInit, AfterViewInit {
     if (this.childService.removeHeightEntries(heights)) {
       this.updateTable();
     } else {
-      console.error('Failed to remove all heights requested');
+      // TODO Snackbar
+      console.error('Failed to remove all heights requested.');
     }
     this.updateTable(true);
   }

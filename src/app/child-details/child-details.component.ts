@@ -18,8 +18,10 @@ import { ChildService } from '../child.service';
           </div>
         </mat-card-content>
       </mat-card>
-      <app-weight [childService]="childService"></app-weight>
-      <app-height [childService]="childService"></app-height>
+      <div fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start center" fxLayoutGap="24px">
+        <app-weight [childService]="childService"></app-weight>
+        <app-height [childService]="childService"></app-height>
+      </div>
     </div>
   `,
   styleUrls: ['./child-details.component.scss'],
