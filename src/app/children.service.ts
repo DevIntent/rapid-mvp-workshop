@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { environment } from '../environments/environment';
 
 export interface Child {
   name: string;
@@ -19,6 +20,12 @@ export class ChildrenService {
       const childrenFromLocalStorage = JSON.parse(localStorage.getItem('children'));
       if (Array.isArray(childrenFromLocalStorage)) {
         this.children = childrenFromLocalStorage;
+      } else {
+        if (environment.production) {
+          this.children = [];
+        } else {
+          this.children = ChildrenService.getMockChildrenData();
+        }
       }
     }
   }
@@ -94,5 +101,12 @@ export class ChildrenService {
     } catch (error) {
       return false;
     }
+  }
+
+  static getMockChildrenData(): Child[] {
+    return [
+      {name: 'Tina', gender: 'female', emoji: '👧🏽', dob: new Date('2017-02-03T05:00:00.000Z')},
+      {name: 'Andrew', gender: 'male', emoji: '👦🏻', dob: new Date('2014-10-01T05:00:00.000Z')}
+    ];
   }
 }

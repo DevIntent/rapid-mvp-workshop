@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Child, ChildrenService } from './children.service';
 import { DateValue } from './chart/date-value';
+import { environment } from '../environments/environment';
 
 export enum WeightUnit {
   LBS = 'lbs',
@@ -55,7 +56,11 @@ export class ChildService {
         });
         this.weights = weights;
       } else {
-        this.weights = [];
+        if (environment.production) {
+          this.weights = [];
+        } else {
+          this.weights = ChildService.getMockWeights();
+        }
       }
     }
 
@@ -67,7 +72,11 @@ export class ChildService {
         });
         this.heights = heights;
       } else {
-        this.heights = [];
+        if (environment.production) {
+          this.heights = [];
+        } else {
+          this.heights = ChildService.getMockHeights();
+        }
       }
     }
   }
@@ -210,5 +219,27 @@ export class ChildService {
     if (this.childrenService.isLocalStorageSupported) {
       localStorage.setItem(`${this.child.name}-heights`, JSON.stringify(heights));
     }
+  }
+
+  static getMockWeights(): Weight[] {
+    return [
+      {value: 21.7, units: WeightUnit.LBS, date: new Date("2018-04-15T04:00:00.000Z")},
+      {value: 18.9, units: WeightUnit.LBS, date: new Date("2018-01-01T05:00:00.000Z")},
+      {value: 14.74, units: WeightUnit.LBS, date: new Date("2017-07-03T04:00:00.000Z")},
+      {value: 18.3, units: WeightUnit.LBS, date: new Date("2017-10-30T04:00:00.000Z")},
+      {value: 9.274, units: WeightUnit.LBS, date: new Date("2017-04-01T04:00:00.000Z")},
+      {value: 7.4, units: WeightUnit.LBS, date: new Date("2017-01-28T05:00:00.000Z")}
+    ];
+  }
+
+  static getMockHeights(): Height[] {
+    return [
+      {meters: 0.8128, feet: 0, inches: 32, units: HeightUnit.FEET, date: new Date('2018-04-15T04:00:00.000Z')},
+      {meters: 0.7874, feet: 0, inches: 31, units: HeightUnit.FEET, date: new Date('2018-01-01T05:00:00.000Z')},
+      {meters: 0.75184, feet: 0, inches: 29.6, units: HeightUnit.FEET, date: new Date('2017-10-30T04:00:00.000Z')},
+      {meters: 0.67564, feet: 0, inches: 26.6, units: HeightUnit.FEET, date: new Date('2017-07-03T04:00:00.000Z')},
+      {meters: 0.5715, feet: 0, inches: 22.5, units: HeightUnit.FEET, date: new Date('2017-03-28T04:00:00.000Z')},
+      {meters: 0.508, feet: 0, inches: 20, units: HeightUnit.FEET, date: new Date('2017-01-28T05:00:00.000Z')}
+    ];
   }
 }
