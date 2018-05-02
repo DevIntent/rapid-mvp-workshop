@@ -106,7 +106,7 @@ export class ChildrenService {
   static getMockChildrenData(): Child[] {
     return [
       {name: 'Tina', gender: 'female', emoji: '👧🏽', dob: new Date('2017-02-03T05:00:00.000Z')},
-      {name: 'Andrew', gender: 'male', emoji: '👦🏻', dob: new Date('2014-10-01T05:00:00.000Z')}
+      {name: 'Andrew', gender: 'male', emoji: '👦🏻', dob: new Date('2017-02-03T05:00:00.000Z')}
     ];
   }
 }

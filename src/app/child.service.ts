@@ -3,19 +3,21 @@ import { Child, ChildrenService } from './children.service';
 import { DateValue } from './chart/date-value';
 import { environment } from '../environments/environment';
 
-export enum WeightUnit {
-  LBS = 'lbs',
-  KGS = 'kg'
+export enum WeightSystem {
+  STANDARD = 'lbs',
+  METRIC = 'kg'
 }
 
-export enum HeightUnit {
-  FEET = 'ft',
-  METERS = 'm'
+export enum HeightSystem {
+  STANDARD = 'ft',
+  METRIC = 'm'
 }
 
 export interface Weight {
-  value: number;
-  units?: WeightUnit;
+  kilograms?: number,
+  pounds?: number,
+  ounces?: number,
+  units?: WeightSystem;
   date?: Date;
 }
 
@@ -23,7 +25,7 @@ export interface Height {
   meters?: number;
   feet?: number;
   inches?: number;
-  units?: HeightUnit;
+  units?: HeightSystem;
   date?: Date;
 }
 
@@ -81,10 +83,16 @@ export class ChildService {
     }
   }
 
-  getWeightSeriesData(): DateValue<number>[] {
+  getWeightSeriesData(units?: WeightSystem): DateValue<number>[] {
     const values = [];
     this.weights.forEach((weight: Weight) => {
-      values.push({name: weight.date, value: weight.value});
+      let value;
+      if (units === WeightSystem.STANDARD) {
+        value = weight.pounds + weight.ounces / 16;
+      } else {
+        value = weight.kilograms;
+      }
+      values.push({name: weight.date, value: value});
     });
     return values;
   }
@@ -94,7 +102,27 @@ export class ChildService {
    */
   addWeightEntry(weight: Weight) {
     if (weight.units === undefined) {
-      weight.units = WeightUnit.LBS;
+      weight.units = WeightSystem.STANDARD;
+    }
+    if (weight.date === undefined) {
+      weight.date = new Date();
+    }
+    if (!weight.pounds) {
+      weight.pounds = 0;
+    }
+    if (!weight.ounces) {
+      weight.ounces = 0;
+    }
+    if (!weight.kilograms) {
+      weight.kilograms = 0;
+    }
+    if (weight.units === WeightSystem.STANDARD) {
+      weight.kilograms = weight.pounds * 0.453592 + weight.ounces * 0.0283495;
+    } else {
+      weight.pounds = weight.kilograms * 2.20462;
+    }
+    if (weight.units === undefined) {
+      weight.units = WeightSystem.STANDARD;
     }
     if (weight.date === undefined) {
       weight.date = new Date();
@@ -141,11 +169,11 @@ export class ChildService {
     }
   }
 
-  getHeightSeriesData(): DateValue<number>[] {
+  getHeightSeriesData(units?: HeightSystem): DateValue<number>[] {
     const values = [];
     this.heights.forEach((height: Height) => {
       let value;
-      if (height.units === HeightUnit.FEET) {
+      if (units === HeightSystem.STANDARD) {
         value = height.feet + height.inches / 12;
       } else {
         value = height.meters;
@@ -160,7 +188,7 @@ export class ChildService {
    */
   addHeightEntry(height: Height) {
     if (height.units === undefined) {
-      height.units = HeightUnit.FEET;
+      height.units = HeightSystem.STANDARD;
     }
     if (height.date === undefined) {
       height.date = new Date();
@@ -174,7 +202,7 @@ export class ChildService {
     if (!height.meters) {
       height.meters = 0;
     }
-    if (height.units === HeightUnit.FEET) {
+    if (height.units === HeightSystem.STANDARD) {
       height.meters = height.feet * 0.3048 + height.inches * 0.0254;
     } else {
       height.feet = height.meters * 3.28084;
@@ -223,23 +251,23 @@ export class ChildService {
 
   static getMockWeights(): Weight[] {
     return [
-      {value: 21.7, units: WeightUnit.LBS, date: new Date("2018-04-15T04:00:00.000Z")},
-      {value: 18.9, units: WeightUnit.LBS, date: new Date("2018-01-01T05:00:00.000Z")},
-      {value: 14.74, units: WeightUnit.LBS, date: new Date("2017-07-03T04:00:00.000Z")},
-      {value: 18.3, units: WeightUnit.LBS, date: new Date("2017-10-30T04:00:00.000Z")},
-      {value: 9.274, units: WeightUnit.LBS, date: new Date("2017-04-01T04:00:00.000Z")},
-      {value: 7.4, units: WeightUnit.LBS, date: new Date("2017-01-28T05:00:00.000Z")}
+      {kilograms: 9.7805775, pounds: 21, ounces: 9, units: WeightSystem.STANDARD, date: new Date('2018-04-15T04:00:00.000Z')},
+      {kilograms: 8.504850000000001, pounds: 18, ounces: 12, units: WeightSystem.STANDARD, date: new Date('2018-01-01T05:00:00.000Z')},
+      {kilograms: 6.7188315, pounds: 14, ounces: 13, units: WeightSystem.STANDARD, date: new Date('2017-07-03T04:00:00.000Z')},
+      {kilograms: 8.278054000000001, pounds: 18, ounces: 4, units: WeightSystem.STANDARD, date: new Date('2017-10-30T04:00:00.000Z')},
+      {kilograms: 4.1957260000000005, pounds: 9, ounces: 4, units: WeightSystem.STANDARD, date: new Date('2017-04-01T04:00:00.000Z')},
+      {kilograms: 3.288542, pounds: 7, ounces: 4, units: WeightSystem.STANDARD, date: new Date('2017-02-03T05:00:00.000Z')},
     ];
   }
 
   static getMockHeights(): Height[] {
     return [
-      {meters: 0.8128, feet: 0, inches: 32, units: HeightUnit.FEET, date: new Date('2018-04-15T04:00:00.000Z')},
-      {meters: 0.7874, feet: 0, inches: 31, units: HeightUnit.FEET, date: new Date('2018-01-01T05:00:00.000Z')},
-      {meters: 0.75184, feet: 0, inches: 29.6, units: HeightUnit.FEET, date: new Date('2017-10-30T04:00:00.000Z')},
-      {meters: 0.67564, feet: 0, inches: 26.6, units: HeightUnit.FEET, date: new Date('2017-07-03T04:00:00.000Z')},
-      {meters: 0.5715, feet: 0, inches: 22.5, units: HeightUnit.FEET, date: new Date('2017-03-28T04:00:00.000Z')},
-      {meters: 0.508, feet: 0, inches: 20, units: HeightUnit.FEET, date: new Date('2017-01-28T05:00:00.000Z')}
+      {meters: 0.8128, feet: 0, inches: 32, units: HeightSystem.STANDARD, date: new Date('2018-04-15T04:00:00.000Z')},
+      {meters: 0.7874, feet: 0, inches: 31, units: HeightSystem.STANDARD, date: new Date('2018-01-01T05:00:00.000Z')},
+      {meters: 0.75184, feet: 0, inches: 29.6, units: HeightSystem.STANDARD, date: new Date('2017-10-30T04:00:00.000Z')},
+      {meters: 0.67564, feet: 0, inches: 26.6, units: HeightSystem.STANDARD, date: new Date('2017-07-03T04:00:00.000Z')},
+      {meters: 0.5715, feet: 0, inches: 22.5, units: HeightSystem.STANDARD, date: new Date('2017-03-28T04:00:00.000Z')},
+      {meters: 0.508, feet: 0, inches: 20, units: HeightSystem.STANDARD, date: new Date('2017-01-28T05:00:00.000Z')}
     ];
   }
 }

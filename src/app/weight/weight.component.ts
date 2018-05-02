@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ChildService, Weight } from '../child.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChildService, Weight, WeightSystem } from '../child.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DateValue } from '../chart/date-value';
@@ -12,14 +12,24 @@ import { DateValue } from '../chart/date-value';
       <mat-card-title>Weight Tracker</mat-card-title>
       <mat-card-content>
         <form [formGroup]="form" fxLayout="column">
-          <mat-form-field>
-            <input matInput type="number" [formControl]="valueControl" required
-                   placeholder="Weight">
+          <div class="poundsContainer" fxLayout="row" *ngIf="unitsControl.value === 'lbs'">
+            <mat-form-field class="poundsInput">
+              <input matInput type="number" [formControl]="poundsControl" min="0"
+                     placeholder="Pounds">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="number" [formControl]="ouncesControl" min="0"
+                     placeholder="Ounces">
+            </mat-form-field>
+          </div>
+          <mat-form-field *ngIf="unitsControl.value === 'kg'">
+            <input matInput type="number" [formControl]="kilogramsControl" min="0"
+                   placeholder="Kilograms">
           </mat-form-field>
           <mat-form-field>
             <mat-select [formControl]="unitsControl" placeholder="Units">
-              <mat-option value="lbs">Pounds</mat-option>
-              <mat-option value="kg">Kilograms</mat-option>
+              <mat-option value="lbs">Standard</mat-option>
+              <mat-option value="kg">Metric</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
@@ -47,8 +57,8 @@ import { DateValue } from '../chart/date-value';
                       matTooltip="Show Table">
                 <mat-icon>list</mat-icon>
               </button>
-              <button mat-icon-button [disabled]="!selection.hasValue()" matTooltip="Delete selected"
-                      (click)="onRemove(selection.selected)">
+              <button mat-icon-button [disabled]="!selection.hasValue()"
+                      matTooltip="Delete selected" (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-toolbar-row>
@@ -73,10 +83,17 @@ import { DateValue } from '../chart/date-value';
                 </mat-checkbox>
               </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="value">
+            <ng-container matColumnDef="pounds" *ngIf="unitsControl.value === 'lbs'">
               <mat-header-cell *matHeaderCellDef> Weight</mat-header-cell>
               <mat-cell *matCellDef="let weight">
-                {{(weight.value | number:'1.0-2') + ' ' + weight.units}}
+                <span *ngIf="weight.pounds">{{(weight.pounds | number:'1.0-2') + ' lbs '}}</span>
+                <span *ngIf="weight.pounds && weight.ounces">&nbsp;</span>
+                <span *ngIf="weight.ounces">{{(weight.ounces | number:'1.0-2') + ' oz'}}</span>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="kilograms" *ngIf="unitsControl.value === 'kg'">
+              <mat-header-cell *matHeaderCellDef> Weight</mat-header-cell>
+              <mat-cell *matCellDef="let weight"> {{(weight.kilograms | number:'1.0-2') + ' kg'}}
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="date">
@@ -96,18 +113,24 @@ export class WeightComponent implements OnInit, AfterViewInit {
   @Input() childService: ChildService;
   @ViewChild(MatSort) sort: MatSort;
   form: FormGroup;
-  valueControl = new FormControl(undefined, Validators.required);
+  kilogramsControl = new FormControl(undefined);
+  poundsControl = new FormControl(undefined);
+  ouncesControl = new FormControl(undefined);
   unitsControl = new FormControl('lbs');
   dateControl = new FormControl(new Date());
   dataSource: MatTableDataSource<Weight>;
-  displayedColumns = ['select', 'value', 'date'];
+  poundColumns = ['select', 'pounds', 'date'];
+  kilogramColumns = ['select', 'kilograms', 'date'];
+  displayedColumns = this.poundColumns;
   selection = new SelectionModel<Weight>(true, []);
   isChartVisible = false;
   chartData: DateValue<number>[];
 
   constructor(fb: FormBuilder, private snackBar: MatSnackBar) {
     this.form = fb.group({
-      value: this.valueControl,
+      kilograms: this.kilogramsControl,
+      pounds: this.poundsControl,
+      ounces: this.ouncesControl,
       units: this.unitsControl,
       date: this.dateControl
     });
@@ -115,16 +138,40 @@ export class WeightComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Weight>(this.childService.weights);
-    this.chartData = this.childService.getWeightSeriesData();
+    this.chartData = this.childService.getWeightSeriesData(this.unitsControl.value);
+
+    this.unitsControl.valueChanges
+    .subscribe((value: WeightSystem) => {
+      if (value === WeightSystem.METRIC) {
+        this.displayedColumns = this.kilogramColumns;
+        this.poundsControl.setValue(undefined);
+        this.ouncesControl.setValue(undefined);
+      } else {
+        this.displayedColumns = this.poundColumns;
+        this.kilogramsControl.setValue(undefined);
+      }
+      this.form.markAsPristine();
+      this.chartData = this.childService.getWeightSeriesData(value);
+    });
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
 
+  resetForm(units?: WeightSystem) {
+    this.form.reset({
+      kilograms: undefined,
+      pounds: undefined,
+      ounces: undefined,
+      units: units ? units : 'lbs',
+      date: new Date()
+    });
+  }
+
   onAddWeightEntry() {
     this.childService.addWeightEntry(this.form.getRawValue());
-    this.form.reset({value: undefined, units: 'lbs', date: new Date()});
+    this.resetForm(this.unitsControl.value);
     this.updateTable();
     this.snackBar.open(`Weight saved.`, '', { duration: 1000 });
   }
@@ -145,7 +192,7 @@ export class WeightComponent implements OnInit, AfterViewInit {
     if (resetSelection) {
       this.selection = new SelectionModel<Weight>(true, []);
     }
-    this.chartData = this.childService.getWeightSeriesData();
+    this.chartData = this.childService.getWeightSeriesData(this.unitsControl.value);
   }
 
   /**

@@ -15,6 +15,14 @@
       color: $light-primary-text;
     }
   }
+  .poundsContainer {
+    .mat-form-field {
+      width: 142px;
+    }
+    .poundsInput {
+      margin-right: 4px;
+    }
+  }
   .tableContainer {
     .mat-table {
       max-height: 400px;
@@ -29,10 +37,21 @@
 @include breakpoint($handset) {
   .mat-card {
     width: 300px;
+    .poundsContainer {
+      .mat-form-field {
+        width: 148px;
+      }
+    }
   }
 }
 @include breakpoint($large-desktop) {
   .mat-card {
     width: 500px;
+
+    .poundsContainer {
+      .mat-form-field {
+        width: 248px;
+      }
+    }
   }
 }

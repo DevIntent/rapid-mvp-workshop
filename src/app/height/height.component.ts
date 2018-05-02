@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ChildService, Height, HeightUnit } from '../child.service';
+import { ChildService, Height, HeightSystem } from '../child.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -12,24 +12,24 @@ import { DateValue } from '../chart/date-value';
       <mat-card-title>Height Tracker</mat-card-title>
       <mat-card-content>
         <form [formGroup]="form" fxLayout="column">
-          <div class="feetContainer" fxLayout="row" *ngIf="form.get('units').value === 'ft'">
+          <div class="feetContainer" fxLayout="row" *ngIf="unitsControl.value === 'ft'">
             <mat-form-field class="feetInput">
-              <input matInput type="number" [formControl]="feetControl"
+              <input matInput type="number" [formControl]="feetControl" min="0"
                      placeholder="Feet">
             </mat-form-field>
             <mat-form-field>
-              <input matInput type="number" [formControl]="inchesControl"
+              <input matInput type="number" [formControl]="inchesControl" min="0"
                      placeholder="Inches">
             </mat-form-field>
           </div>
-          <mat-form-field *ngIf="form.get('units').value === 'm'">
-            <input matInput type="number" [formControl]="metersControl"
+          <mat-form-field *ngIf="unitsControl.value === 'm'">
+            <input matInput type="number" [formControl]="metersControl" min="0"
                    placeholder="Meters">
           </mat-form-field>
           <mat-form-field>
             <mat-select [formControl]="unitsControl" placeholder="Units">
-              <mat-option value="ft">Feet</mat-option>
-              <mat-option value="m">Meters</mat-option>
+              <mat-option value="ft">Standard</mat-option>
+              <mat-option value="m">Metric</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
@@ -39,7 +39,8 @@ import { DateValue } from '../chart/date-value';
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
           <button mat-button (click)="onAddHeightEntry()" color="primary"
-                  [disabled]="form.pristine || form.invalid">Save</button>
+                  [disabled]="form.pristine || form.invalid">Save
+          </button>
         </form>
         <div class="tableContainer" *ngIf="childService.heights.length" fxLayout="column">
           <br>
@@ -56,8 +57,8 @@ import { DateValue } from '../chart/date-value';
                       matTooltip="Show Table">
                 <mat-icon>list</mat-icon>
               </button>
-              <button mat-icon-button [disabled]="!selection.hasValue()" matTooltip="Delete selected"
-                      (click)="onRemove(selection.selected)">
+              <button mat-icon-button [disabled]="!selection.hasValue()"
+                      matTooltip="Delete selected" (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-toolbar-row>
@@ -82,21 +83,22 @@ import { DateValue } from '../chart/date-value';
                 </mat-checkbox>
               </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="feet" *ngIf="form.get('units').value === 'ft'">
-              <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
-              <mat-cell *matCellDef="let height"> 
+            <ng-container matColumnDef="feet" *ngIf="unitsControl.value === 'ft'">
+              <mat-header-cell *matHeaderCellDef> Height</mat-header-cell>
+              <mat-cell *matCellDef="let height">
                 <span *ngIf="height.feet">{{(height.feet | number:'1.0-2') + ' ft '}}</span>
                 <span *ngIf="height.feet && height.inches">&nbsp;</span>
-                <span *ngIf="height.inches">{{(height.inches | number:'1.0-2') + ' in'}}</span> 
+                <span *ngIf="height.inches">{{(height.inches | number:'1.0-2') + ' in'}}</span>
               </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="meters" *ngIf="form.get('units').value === 'm'">
-              <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
-              <mat-cell *matCellDef="let height"> {{(height.meters | number:'1.0-2') + ' m'}} </mat-cell>
+            <ng-container matColumnDef="meters" *ngIf="unitsControl.value === 'm'">
+              <mat-header-cell *matHeaderCellDef> Height</mat-header-cell>
+              <mat-cell *matCellDef="let height"> {{(height.meters | number:'1.0-2') + ' m'}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
-              <mat-cell *matCellDef="let height"> {{height.date | date }} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date</mat-header-cell>
+              <mat-cell *matCellDef="let height"> {{height.date | date }}</mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -136,19 +138,20 @@ export class HeightComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Height>(this.childService.heights);
-    this.chartData = this.childService.getHeightSeriesData();
+    this.chartData = this.childService.getHeightSeriesData(this.unitsControl.value);
 
     this.unitsControl.valueChanges
-    .subscribe((value: HeightUnit) => {
-      if (value === HeightUnit.METERS) {
+    .subscribe((value: HeightSystem) => {
+      if (value === HeightSystem.METRIC) {
         this.displayedColumns = this.meterColumns;
-        this.form.get('feet').setValue(undefined);
-        this.form.get('inches').setValue(undefined);
+        this.feetControl.setValue(undefined);
+        this.inchesControl.setValue(undefined);
       } else {
         this.displayedColumns = this.feetColumns;
-        this.form.get('meters').setValue(undefined);
+        this.metersControl.setValue(undefined);
       }
       this.form.markAsPristine();
+      this.chartData = this.childService.getHeightSeriesData(value);
     });
   }
 
@@ -168,7 +171,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
 
   onAddHeightEntry() {
     this.childService.addHeightEntry(this.form.getRawValue());
-    this.resetForm();
+    this.resetForm(this.unitsControl.value);
     this.updateTable();
     this.snackBar.open(`Height saved.`, '', { duration: 1000 });
   }
@@ -189,7 +192,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
     if (resetSelection) {
       this.selection = new SelectionModel<Height>(true, []);
     }
-    this.chartData = this.childService.getHeightSeriesData();
+    this.chartData = this.childService.getHeightSeriesData(this.unitsControl.value);
   }
 
   /**
