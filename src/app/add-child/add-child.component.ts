@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Child, ChildrenService } from '../children.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-add-child',
@@ -13,7 +14,8 @@ import { Child, ChildrenService } from '../children.service';
            [ngClass]="childrenService.getChildren()?.length ? 'belowChildren' : ''">
         <mat-card id="boy" (click)="addBoy()" aria-label="Add a boy">
           <mat-card-content fxLayout="row" fxLayoutAlign="center center">
-            <app-avatar gender="male" [emoji]="defaultBoyEmoji" opacity="0.7"></app-avatar>
+            <app-avatar gender="male" [emoji]="defaultBoyEmoji" opacity="0.7"
+                        fxLayout="column" fxLayoutAlign="start center"></app-avatar>
           </mat-card-content>
           <mat-card-actions align="end">
             <button mat-button color="primary">Add a boy</button>
@@ -21,7 +23,8 @@ import { Child, ChildrenService } from '../children.service';
         </mat-card>
         <mat-card id="girl" (click)="addGirl()" aria-label="Add a girl">
           <mat-card-content fxLayout="row" fxLayoutAlign="center center">
-            <app-avatar gender="female" [emoji]="defaultGirlEmoji" opacity="0.7"></app-avatar>
+            <app-avatar gender="female" [emoji]="defaultGirlEmoji" opacity="0.7"
+                        fxLayout="column" fxLayoutAlign="start center"></app-avatar>
           </mat-card-content>
           <mat-card-actions align="end">
             <button mat-button color="accent">Add a girl</button>
@@ -67,6 +70,7 @@ export class AddChildComponent implements OnInit {
 
   constructor(private router: Router,
               private fb: FormBuilder,
+              private snackBar: MatSnackBar,
               public childrenService: ChildrenService) {
     this.form = this.fb.group({
       name: this.nameControl,
@@ -99,6 +103,7 @@ export class AddChildComponent implements OnInit {
   onSave() {
     const child = Object.assign(this.child, this.form.getRawValue());
     this.childrenService.addChild(child);
+    this.snackBar.open(`${this.child.name} added.`, '', { duration: 1000 });
     this.clearChild();
   }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Location as NgLocation } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +8,9 @@ import { Location as NgLocation } from '@angular/common';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  showBackButton = false;
 
-  constructor(private ngLocation: NgLocation) {}
+  constructor() {}
 
-  ngOnInit() {}
-
-  public back() {
-    this.ngLocation.back();
+  ngOnInit() {
   }
 }

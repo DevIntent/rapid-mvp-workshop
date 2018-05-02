@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
                 aria-label="View Child">
         <mat-card-title>{{child.name}}</mat-card-title>
         <mat-card-content>
-          <app-avatar [gender]="child.gender" [emoji]="child.emoji"></app-avatar>
-          <div *ngIf="child.dob">
+          <app-avatar [gender]="child.gender" [emoji]="child.emoji"
+                      fxLayout="column" fxLayoutAlign="start center"></app-avatar>
+          <div [style.visibility]="child.dob ? 'visible' : 'hidden'">
             <div><label>Age</label></div>
             <div class="age">{{childrenService.getAge(child.dob)}}</div>
           </div>

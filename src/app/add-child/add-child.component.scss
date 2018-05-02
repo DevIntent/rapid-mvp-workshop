@@ -19,11 +19,13 @@
     }
 
     .mat-card {
-      width: 140px;
+      width: 192px;
       cursor: pointer;
     }
   }
   form {
+    margin-bottom: $base-spacing;
+
     .mat-card-content {
       font-size: 16px;
     }

@@ -80,20 +80,6 @@ export class ChildService {
     return values;
   }
 
-  getHeightSeriesData(): DateValue<number>[] {
-    const values = [];
-    this.heights.forEach((height: Height) => {
-      let value;
-      if (height.units === HeightUnit.FEET) {
-        value = height.feet + height.inches / 12;
-      } else {
-        value = height.meters;
-      }
-      values.push({name: height.date, value: value});
-    });
-    return values;
-  }
-
   /**
    * @param {Weight} weight to add
    */
@@ -144,6 +130,20 @@ export class ChildService {
     if (this.childrenService.isLocalStorageSupported) {
       localStorage.setItem(`${this.child.name}-weights`, JSON.stringify(weights));
     }
+  }
+
+  getHeightSeriesData(): DateValue<number>[] {
+    const values = [];
+    this.heights.forEach((height: Height) => {
+      let value;
+      if (height.units === HeightUnit.FEET) {
+        value = height.feet + height.inches / 12;
+      } else {
+        value = height.meters;
+      }
+      values.push({name: height.date, value: value});
+    });
+    return values;
   }
 
   /**

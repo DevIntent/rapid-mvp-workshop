@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChildService, Weight } from '../child.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DateValue } from '../chart/date-value';
 
@@ -47,7 +47,7 @@ import { DateValue } from '../chart/date-value';
                       matTooltip="Show Table">
                 <mat-icon>list</mat-icon>
               </button>
-              <button mat-icon-button [disabled]="!selection.hasValue()"
+              <button mat-icon-button [disabled]="!selection.hasValue()" matTooltip="Delete selected"
                       (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -105,7 +105,7 @@ export class WeightComponent implements OnInit, AfterViewInit {
   isChartVisible = false;
   chartData: DateValue<number>[];
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private snackBar: MatSnackBar) {
     this.form = fb.group({
       value: this.valueControl,
       units: this.unitsControl,
@@ -126,12 +126,14 @@ export class WeightComponent implements OnInit, AfterViewInit {
     this.childService.addWeightEntry(this.form.getRawValue());
     this.form.reset({value: undefined, units: 'lbs', date: new Date()});
     this.updateTable();
+    this.snackBar.open(`Weight saved.`, '', { duration: 1000 });
   }
 
   onRemove(weights: Weight[]) {
     if (this.childService.removeWeightEntries(weights)) {
+      this.snackBar.open(`${weights.length > 1 ? 'Weight entries' : 'Weight entry'} removed.`,
+        '', { duration: 2000 });
     } else {
-      // TODO Snackbar
       console.error('Failed to remove all weights requested.');
     }
     this.updateTable(true);

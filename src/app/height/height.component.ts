@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChildService, Height, HeightUnit } from '../child.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DateValue } from '../chart/date-value';
 
@@ -56,7 +56,7 @@ import { DateValue } from '../chart/date-value';
                       matTooltip="Show Table">
                 <mat-icon>list</mat-icon>
               </button>
-              <button mat-icon-button [disabled]="!selection.hasValue()" 
+              <button mat-icon-button [disabled]="!selection.hasValue()" matTooltip="Delete selected"
                       (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -124,7 +124,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
   isChartVisible = false;
   chartData: DateValue<number>[];
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private snackBar: MatSnackBar) {
     this.form = fb.group({
       meters: this.metersControl,
       feet: this.feetControl,
@@ -138,7 +138,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource<Height>(this.childService.heights);
     this.chartData = this.childService.getHeightSeriesData();
 
-    this.form.get('units').valueChanges
+    this.unitsControl.valueChanges
     .subscribe((value: HeightUnit) => {
       if (value === HeightUnit.METERS) {
         this.displayedColumns = this.meterColumns;
@@ -170,13 +170,14 @@ export class HeightComponent implements OnInit, AfterViewInit {
     this.childService.addHeightEntry(this.form.getRawValue());
     this.resetForm();
     this.updateTable();
+    this.snackBar.open(`Height saved.`, '', { duration: 1000 });
   }
 
   onRemove(heights: Height[]) {
     if (this.childService.removeHeightEntries(heights)) {
-      this.updateTable();
+      this.snackBar.open(`${heights.length > 1 ? 'Height entries' : 'Height entry'} removed.`,
+        '', { duration: 2000 });
     } else {
-      // TODO Snackbar
       console.error('Failed to remove all heights requested.');
     }
     this.updateTable(true);
