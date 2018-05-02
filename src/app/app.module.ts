@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './shared/material.module';
 import { AppComponent } from './app.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FooterComponent } from './footer/footer.component';
 import { TopNavComponent } from './top-nav/top-nav.component';
 import { AddChildComponent } from './add-child/add-child.component';
@@ -16,6 +17,7 @@ import { ChildDetailsComponent } from './child-details/child-details.component';
 import { WeightComponent } from './weight/weight.component';
 import { HeightComponent } from './height/height.component';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
+import { ChartComponent } from './chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
     ChildDetailsComponent,
     WeightComponent,
     HeightComponent,
-    EmojiPickerComponent
+    EmojiPickerComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
     ReactiveFormsModule,
     MaterialModule,
     FlexLayoutModule,
+    NgxChartsModule,
     AppRoutingModule
   ],
   providers: [ChildrenService],

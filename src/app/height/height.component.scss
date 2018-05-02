@@ -29,6 +29,10 @@
       overflow: auto;
     }
   }
+  app-chart {
+    height: 400px;
+    width: 100%;
+  }
 }
 @include breakpoint($handset) {
   .mat-card {
@@ -37,6 +41,17 @@
     .feetContainer {
       .mat-form-field {
         width: 148px;
+      }
+    }
+  }
+}
+@include breakpoint($large-desktop) {
+  .mat-card {
+    width: 500px;
+
+    .feetContainer {
+      .mat-form-field {
+        width: 248px;
       }
     }
   }

@@ -3,6 +3,7 @@ import { ChildService, Weight } from '../child.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DateValue } from '../chart/date-value';
 
 @Component({
   selector: 'app-weight',
@@ -27,22 +28,36 @@ import { SelectionModel } from '@angular/cdk/collections';
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-          <button mat-button (click)="onAddWeightEntry()" color="primary" [disabled]="form.invalid">Save</button>
+          <button mat-button (click)="onAddWeightEntry()" color="primary" [disabled]="form.invalid">
+            Save
+          </button>
         </form>
-        <div class="tableContainer" *ngIf="childService.weights.length">
+        <div class="tableContainer" *ngIf="childService.weights.length" fxLayout="column">
           <br>
           <mat-toolbar [ngClass]="{'boy': childService.child.gender === 'male',
                                    'girl': childService.child.gender === 'female'}">
             <mat-toolbar-row>
               <span>Weight History</span>
               <span fxFlex></span>
+              <button mat-icon-button *ngIf="!isChartVisible && childService.weights.length > 1"
+                      (click)="isChartVisible = true" matTooltip="Show Chart">
+                <mat-icon>show_chart</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="isChartVisible" (click)="isChartVisible = false"
+                      matTooltip="Show Table">
+                <mat-icon>list</mat-icon>
+              </button>
               <button mat-icon-button [disabled]="!selection.hasValue()"
                       (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-toolbar-row>
           </mat-toolbar>
-          <mat-table #table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc">
+          <app-chart *ngIf="isChartVisible" [name]="childService.child.name" [series]="chartData"
+                     [scheme]="childService.child.gender === 'male' ? childService.boyScheme : childService.girlScheme"
+                     [yAxisLabel]="unitsControl.value"></app-chart>
+          <mat-table #table [dataSource]="dataSource" matSort matSortActive="date"
+                     matSortDirection="desc" *ngIf="!isChartVisible">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
@@ -59,12 +74,14 @@ import { SelectionModel } from '@angular/cdk/collections';
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="value">
-              <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-              <mat-cell *matCellDef="let weight"> {{(weight.value | number:'1.0-2') + ' ' + weight.units}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef> Weight</mat-header-cell>
+              <mat-cell *matCellDef="let weight">
+                {{(weight.value | number:'1.0-2') + ' ' + weight.units}}
+              </mat-cell>
             </ng-container>
             <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
-              <mat-cell *matCellDef="let weight"> {{weight.date | date }} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date</mat-header-cell>
+              <mat-cell *matCellDef="let weight"> {{weight.date | date }}</mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -85,6 +102,8 @@ export class WeightComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Weight>;
   displayedColumns = ['select', 'value', 'date'];
   selection = new SelectionModel<Weight>(true, []);
+  isChartVisible = false;
+  chartData: DateValue<number>[];
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
@@ -96,6 +115,7 @@ export class WeightComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Weight>(this.childService.weights);
+    this.chartData = this.childService.getWeightSeriesData();
   }
 
   ngAfterViewInit() {
@@ -123,6 +143,7 @@ export class WeightComponent implements OnInit, AfterViewInit {
     if (resetSelection) {
       this.selection = new SelectionModel<Weight>(true, []);
     }
+    this.chartData = this.childService.getWeightSeriesData();
   }
 
   /**

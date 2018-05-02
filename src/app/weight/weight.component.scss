@@ -21,9 +21,18 @@
       overflow: auto;
     }
   }
+  app-chart {
+    height: 400px;
+    width: 100%;
+  }
 }
 @include breakpoint($handset) {
   .mat-card {
     width: 300px;
+  }
+}
+@include breakpoint($large-desktop) {
+  .mat-card {
+    width: 500px;
   }
 }

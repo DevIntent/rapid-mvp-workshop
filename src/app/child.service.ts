@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Child, ChildrenService } from './children.service';
+import { DateValue } from './chart/date-value';
 
 export enum WeightUnit {
   LBS = 'lbs',
@@ -30,6 +31,12 @@ export class ChildService {
   child: Child;
   weights: Weight[] = [];
   heights: Height[] = [];
+  girlScheme = {
+    domain: ['#f06292', '#f8bbd0', '#d81b60']
+  };
+  boyScheme = {
+    domain: ['#4dd0e1', '#b2ebf2', '#00acc1']
+  };
 
   constructor(private childrenService: ChildrenService) {
   }
@@ -43,6 +50,9 @@ export class ChildService {
     if (this.childrenService.isLocalStorageSupported) {
       const weights = JSON.parse(localStorage.getItem(`${this.child.name}-weights`));
       if (Array.isArray(weights)) {
+        weights.forEach((weight) => {
+          weight.date = new Date(weight.date);
+        });
         this.weights = weights;
       } else {
         this.weights = [];
@@ -52,11 +62,36 @@ export class ChildService {
     if (this.childrenService.isLocalStorageSupported) {
       const heights = JSON.parse(localStorage.getItem(`${this.child.name}-heights`));
       if (Array.isArray(heights)) {
+        heights.forEach((height) => {
+          height.date = new Date(height.date);
+        });
         this.heights = heights;
       } else {
         this.heights = [];
       }
     }
+  }
+
+  getWeightSeriesData(): DateValue<number>[] {
+    const values = [];
+    this.weights.forEach((weight: Weight) => {
+      values.push({name: weight.date, value: weight.value});
+    });
+    return values;
+  }
+
+  getHeightSeriesData(): DateValue<number>[] {
+    const values = [];
+    this.heights.forEach((height: Height) => {
+      let value;
+      if (height.units === HeightUnit.FEET) {
+        value = height.feet + height.inches / 12;
+      } else {
+        value = height.meters;
+      }
+      values.push({name: height.date, value: value});
+    });
+    return values;
   }
 
   /**

@@ -32,3 +32,8 @@
     width: 672px;
   }
 }
+@include breakpoint($large-desktop) {
+  .mat-card {
+    width: 1072px;
+  }
+}

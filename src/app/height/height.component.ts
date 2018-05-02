@@ -3,6 +3,7 @@ import { ChildService, Height, HeightUnit } from '../child.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DateValue } from '../chart/date-value';
 
 @Component({
   selector: 'app-height',
@@ -40,20 +41,32 @@ import { SelectionModel } from '@angular/cdk/collections';
           <button mat-button (click)="onAddHeightEntry()" color="primary"
                   [disabled]="form.pristine || form.invalid">Save</button>
         </form>
-        <div class="tableContainer" *ngIf="childService.heights.length">
+        <div class="tableContainer" *ngIf="childService.heights.length" fxLayout="column">
           <br>
           <mat-toolbar [ngClass]="{'boy': childService.child.gender === 'male',
                                    'girl': childService.child.gender === 'female'}">
             <mat-toolbar-row>
               <span>Height History</span>
               <span fxFlex></span>
+              <button mat-icon-button *ngIf="!isChartVisible && childService.heights.length > 1"
+                      (click)="isChartVisible = true" matTooltip="Show Chart">
+                <mat-icon>show_chart</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="isChartVisible" (click)="isChartVisible = false"
+                      matTooltip="Show Table">
+                <mat-icon>list</mat-icon>
+              </button>
               <button mat-icon-button [disabled]="!selection.hasValue()" 
                       (click)="onRemove(selection.selected)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-toolbar-row>
           </mat-toolbar>
-          <mat-table #table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc">
+          <app-chart *ngIf="isChartVisible" [name]="childService.child.name" [series]="chartData"
+                     [scheme]="childService.child.gender === 'male' ? childService.boyScheme : childService.girlScheme"
+                     [yAxisLabel]="unitsControl.value"></app-chart>
+          <mat-table #table [dataSource]="dataSource" matSort matSortActive="date"
+                     matSortDirection="desc" *ngIf="!isChartVisible">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
@@ -108,6 +121,8 @@ export class HeightComponent implements OnInit, AfterViewInit {
   meterColumns = ['select', 'meters', 'date'];
   displayedColumns = this.feetColumns;
   selection = new SelectionModel<Height>(true, []);
+  isChartVisible = false;
+  chartData: DateValue<number>[];
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
@@ -121,6 +136,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource<Height>(this.childService.heights);
+    this.chartData = this.childService.getHeightSeriesData();
 
     this.form.get('units').valueChanges
     .subscribe((value: HeightUnit) => {
@@ -172,6 +188,7 @@ export class HeightComponent implements OnInit, AfterViewInit {
     if (resetSelection) {
       this.selection = new SelectionModel<Height>(true, []);
     }
+    this.chartData = this.childService.getHeightSeriesData();
   }
 
   /**
