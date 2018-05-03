@@ -38,7 +38,8 @@ import { DateValue } from '../chart/date-value';
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-          <button mat-button (click)="onAddWeightEntry()" color="primary" [disabled]="form.invalid">
+          <button mat-button (click)="onAddWeightEntry()" color="primary"
+                  [disabled]="form.pristine || form.invalid">
             Save
           </button>
         </form>
