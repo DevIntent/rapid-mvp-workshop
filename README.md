@@ -26,12 +26,12 @@ and the UI. We'll use mock data and localStorage to simulate a database
 so that we can stay focused on the design, layout, and interaction.
 In this phase, we'll cover some of the following technologies:
 
-1. Angular CLI
-1. Angular Material
-1. Angular Flex Layout
-1. HTML 5 localStorage
-1. Angular Reactive Forms
-1. ngx-charts (to visualize data with d3)
+1. [Angular CLI](cli.angular.io)
+1. [Angular Material](https://material.angular.io)
+1. Angular [Flex Layout](https://github.com/angular/flex-layout)
+1. [HTML 5 localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API)
+1. Angular [Reactive Forms](https://angular.io/guide/reactive-forms)
+1. [ngx-charts](https://swimlane.github.io/ngx-charts/#/ngx-charts/bar-vertical) (to visualize data with [D3.js](https://d3js.org))
 
 ## Phase 2
 In the second phase, we'll get more functional by adding features from
@@ -40,7 +40,7 @@ attach a database, add user authentication, and enable storing files.
 In this phase, we'll cover some of the following technologies:
 
 1. Firebase Hosting
-1. AngularFire2
+1. [AngularFire2](https://github.com/angular/angularfire2)
 1. Firebase Realtime Database
 1. Firebase Auth
 1. Firebase Cloud Storage
