@@ -41,6 +41,114 @@ resolve them with 1 button. Press "Install Missing Dependencies".
 
 1. Add `hammerjs` to the NPM packages list to enable touch gestures
 
+<img width="296" alt="Context Menu" src="https://user-images.githubusercontent.com/3506071/39678192-ffb356a6-513c-11e8-8502-10fb02155ecc.png">
+
+1. Right click on the `app/` folder to get the context menu. In this menu,
+select to create a "New Folder".
+1. When prompted, name it `shared`.
+1. Right click on the `shared/` folder to get the context menu. In this menu,
+select to generate a "Module".
+1. When prompted, name it `material`.
+1. Drag and drop the `material.module.ts` file into the `shared/` folder and delete
+  the `material/` folder, if it exists.
+1. Open `/src/app/app.module.ts` and add `MaterialModule` to the `imports` array.
+1. Then add the following TypeScript import to remove the warning
+```ts
+import { MaterialModule } from './shared/material.module';
+```
+1. Remove the contents of `/src/app/material.module.ts` and then paste in the
+  following:
+```ts
+import { NgModule } from '@angular/core';
+import {
+  MatAutocompleteModule, MatBottomSheetModule, MatButtonModule, MatButtonToggleModule,
+  MatCardModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule, MatDialogModule,
+  MatDividerModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule,
+  MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule,
+  MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSliderModule,
+  MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule,
+  MatTabsModule, MatToolbarModule, MatTooltipModule
+} from '@angular/material';
+
+@NgModule({
+  imports: [
+    MatAutocompleteModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSortModule,
+    MatSnackBarModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule
+  ],
+  exports: [
+    MatAutocompleteModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSortModule,
+    MatSnackBarModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule
+  ]
+})
+export class MaterialModule {
+}
+```
+This imports all of the Angular Material modules and makes them available to use in your templates,
+components, and services.
+
+Importing all of the Material modules in one `MaterialModule` is only for prototyping.
+It will result in bundle bloating in a production app.
+
 ### Install the other dependencies that we'll need
 1. Install the following NPM packages
     1. `@angular/flex-layout@6.0.0-beta.15`
