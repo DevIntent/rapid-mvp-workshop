@@ -1,7 +1,5 @@
 # Other Resources
 
-
-
 ## Data Sources
 
 1. WHO Growth Charts \(0-2 years old\): [boys](https://www.cdc.gov/growthcharts/who/boys_length_weight.htm), [girls](https://www.cdc.gov/growthcharts/who/girls_length_weight.htm)
