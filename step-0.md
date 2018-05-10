@@ -189,6 +189,8 @@ using one of the built-in Material themes. In `/src/styles.scss`, import a theme
     - pink-bluegrey
     - purple-green
     
+    More details on theming in Angular Material can be found in the [Theming Guide](https://material.angular.io/guide/theming).
+    
 1. Now you should see an indigo toolbar, but it isn't full bleed (meaning that it doesn't
 stretch to the left, right, and top edges of the page in this case). Let's fix this by
 adding the following CSS just below that import:
@@ -198,5 +200,29 @@ adding the following CSS just below that import:
       margin: 0;
     }
     ```
+
+## Typography and Icons
+
+1. Material Design comes with an open source icon set. Let's link it in the `<head>` of
+our `/src/index.html`:
+
+    ```html
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    ```
+    You can quickly look up Material Design icons [here](https://material.io/tools/icons/).
+    Note the filter input in the top left and the new icon themes on the left side.
+
+    <img height="600px" alt="Material Design Icons page" src="https://user-images.githubusercontent.com/3506071/39853468-6ab9fe7c-53f0-11e8-9ff7-ec31823dbcfe.png">
+    
+1. Angular Material's typography uses the Roboto font by default. We need to link it, with
+the font weights that we need to use, in the `/src/index.html`'s `<head>` as well:
+
+    ```html
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    ```
+
+1. Now we want to use Angular Material's typography across our whole app. So we'll add
+`class="mat-typography"` to our `<html>` element. More details on Angular Material's typography
+can be found in the [Typography Guide](https://material.angular.io/guide/typography).
 
 [Go to the Next Step](step-1.md)
