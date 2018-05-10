@@ -136,6 +136,10 @@ cards. Let's add the boy card and some containers (for layout) first:
     accounts for row vs column layouts. See the
     [fxLayoutGap docs](https://github.com/angular/flex-layout/wiki/fxLayoutGap-API)
     for more details.
+    
+    Just one note about the SCSS that we added. We're using a special `:host` pseudo selector here.
+    This allows styling the element that hosts the component, rather than some child element within
+    the component. You can learn more in the Angular's [Component Stying Docs](https://angular.io/guide/component-styles#host).
 
     Now if you are starting to understand how Flex Layouts are supposed to work, you should
     be wondering why your new card isn't centered! doh! This is actually a very common issue.
