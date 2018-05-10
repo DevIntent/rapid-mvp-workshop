@@ -35,12 +35,12 @@ Additionally, StackBlitz provides code completion and other editor features via 
 
 ### Now let's setup Angular Material
 
-![Add Material to NPM](https://user-images.githubusercontent.com/3506071/39678047-377d6534-513a-11e8-9770-760af467b645.png)
+<img height="400px" alt="Add Material to NPM" src="https://user-images.githubusercontent.com/3506071/39678047-377d6534-513a-11e8-9770-760af467b645.png">
 
 1. Under "Dependencies"-&gt;"npm packages"-&gt;"enter package name", type
    `@angular/material` and press the ENTER key.
 
-    ![Add CDK peer dependency](https://user-images.githubusercontent.com/3506071/39678053-6b0001aa-513a-11e8-84eb-94dcb3291fd4.png)
+    <img height="140px" alt="Add CDK peer dependency" src="https://user-images.githubusercontent.com/3506071/39678053-6b0001aa-513a-11e8-84eb-94dcb3291fd4.png">
 
 1. StackBlitz automatically detects unmet peer dependencies and allows you to resolve them with 1 button. Press "Install Missing Dependencies".
 1. Add `hammerjs` to the NPM packages list to enable touch gestures
@@ -49,7 +49,7 @@ Additionally, StackBlitz provides code completion and other editor features via 
     import 'hammerjs';
     ```
 
-    ![StackBlitz Context Menu](https://user-images.githubusercontent.com/3506071/39678192-ffb356a6-513c-11e8-8502-10fb02155ecc.png)
+    <img height="500px" alt="StackBlitz Context Menu" src="https://user-images.githubusercontent.com/3506071/39678192-ffb356a6-513c-11e8-8502-10fb02155ecc.png">
 
 1. Right click on the `app/` folder to get the context menu. In this menu,
    select to generate a "Module".
