@@ -17,11 +17,12 @@ Additionally, StackBlitz provides code completion and other editor features via 
 
 1. Open [Step 0 in StackBlitz](http://stackblitz.com/github/devintent/rapid-mvp-workshop/tree/step-0)
 
-This application doesn't do much. It's just an image and a list of helpful links. First let's wipe out the default content.
+    This application doesn't do much. It's just an image and a list of helpful links. First let's wipe out the default content.
 
-1. Replace the content from the template in `/src/app/app.component.ts` with
-   a `router-outlet` element. The result should be the following:
+2. Replace the content from the template in `/src/app/app.component.ts` with
+   a `router-outlet` element. 
    
+   The result should be the following:
    ```typescript
    template: `
     <router-outlet></router-outlet>
@@ -39,32 +40,32 @@ This application doesn't do much. It's just an image and a list of helpful links
 1. Under "Dependencies"-&gt;"npm packages"-&gt;"enter package name", type
    `@angular/material` and press the ENTER key.
 
-![Add CDK peer dependency](https://user-images.githubusercontent.com/3506071/39678053-6b0001aa-513a-11e8-84eb-94dcb3291fd4.png)
+    ![Add CDK peer dependency](https://user-images.githubusercontent.com/3506071/39678053-6b0001aa-513a-11e8-84eb-94dcb3291fd4.png)
 
 1. StackBlitz automatically detects unmet peer dependencies and allows you to resolve them with 1 button. Press "Install Missing Dependencies".
-2. Add `hammerjs` to the NPM packages list to enable touch gestures
+1. Add `hammerjs` to the NPM packages list to enable touch gestures
 
-![StackBlitz Context Menu](https://user-images.githubusercontent.com/3506071/39678192-ffb356a6-513c-11e8-8502-10fb02155ecc.png)
+    ![StackBlitz Context Menu](https://user-images.githubusercontent.com/3506071/39678192-ffb356a6-513c-11e8-8502-10fb02155ecc.png)
 
 1. Right click on the `app/` folder to get the context menu. In this menu,
    select to create a "New Folder".
 
-2. When prompted, name it `shared`.
-3. Right click on the `shared/` folder to get the context menu. In this menu,
+1. When prompted, name it `shared`.
+1. Right click on the `shared/` folder to get the context menu. In this menu,
    select to generate a "Module".
 
-4. When prompted, name it `material`.
-5. Drag and drop the `material.module.ts` file into the `shared/` folder and delete
+1. When prompted, name it `material`.
+1. Drag and drop the `material.module.ts` file into the `shared/` folder and delete
    the `material/` folder, if it exists.
 
-6. Open `/src/app/app.module.ts` and add `MaterialModule` to the `imports` array.
-7. Then add the following TypeScript import to remove the warning
+1. Open `/src/app/app.module.ts` and add `MaterialModule` to the `imports` array.
+1. Then add the following TypeScript import to remove the warning
 
    ```typescript
    import { MaterialModule } from './shared/material.module';
    ```
 
-8. Remove the contents of `/src/app/material.module.ts` and then paste in the
+1. Remove the contents of `/src/app/material.module.ts` and then paste in the
    following:
 
 ```typescript
@@ -153,19 +154,18 @@ export class MaterialModule {
 }
 ```
 
-This imports all of the Angular Material modules and makes them available to use in your templates, components, and services.
+This imports all of the Angular Material modules and makes them available to use in your templates, components,
+and services.
 
-{% hint style="info" %}
-Importing all of the Material modules in one `MaterialModule` is only for prototyping. It will result in bundle bloating in a production app.
-{% endhint %}
+> **NOTE**: Importing all of the Material modules in one `MaterialModule` is only for prototyping. It will result in bundle
+bloating in a production app.
 
 ### Install the other dependencies that we'll need
 
-1. Install the following NPM packages
-   1. `@angular/flex-layout@6.0.0-beta.15`
-   2. `@swimlane/ngx-charts`
-   3. `moment`
-   4. `rxjs-compat`
+Install the following NPM packages
+ - `@angular/flex-layout@6.0.0-beta.15`
+ - `@swimlane/ngx-charts`
+ - `moment`
+ - `rxjs-compat`
 
 [Go to the Next Step](step-1.md)
-

@@ -5,4 +5,4 @@
 1. Right click on the `app/` folder to get the context menu. In this menu,
    select to generate a new "Component".
 
-2. When prompted for the component name, type `add-child` and press the ENTER key.
+1. When prompted for the component name, type `add-child` and press the ENTER key.
