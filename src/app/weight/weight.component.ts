@@ -112,7 +112,7 @@ import { DateValue } from '../chart/date-value';
 })
 export class WeightComponent implements OnInit, AfterViewInit {
   @Input() childService: ChildService;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   form: FormGroup;
   kilogramsControl = new FormControl(undefined);
   poundsControl = new FormControl(undefined);

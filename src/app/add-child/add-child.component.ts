@@ -59,7 +59,7 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./add-child.component.scss']
 })
 export class AddChildComponent implements OnInit {
-  @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
   child: Child;
   form: FormGroup;
   defaultBoyEmoji = '👦🏽';
