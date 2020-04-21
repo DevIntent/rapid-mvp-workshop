@@ -113,7 +113,7 @@ import { DateValue } from '../chart/date-value';
 })
 export class HeightComponent implements OnInit, AfterViewInit {
   @Input() childService: ChildService;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   form: FormGroup;
   metersControl = new FormControl(undefined);
   feetControl = new FormControl(undefined);

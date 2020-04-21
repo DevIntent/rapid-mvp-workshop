@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=8",
-    "npm": ">=5"
+    "node": ">=10",
+    "npm": ">=6"
   },
   "scripts": {
     "ng": "ng",
