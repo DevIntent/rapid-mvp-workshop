@@ -14,9 +14,9 @@ export enum HeightSystem {
 }
 
 export interface Weight {
-  kilograms?: number,
-  pounds?: number,
-  ounces?: number,
+  kilograms?: number;
+  pounds?: number;
+  ounces?: number;
   units?: WeightSystem;
   date?: Date;
 }
